@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Six Degrees of Movies</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <script src="https://unpkg.com/htmx.org@1.9.9" integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div class="header">
+            <h1>Six Degrees of Movies</h1>
+        </div>
+
+        <div class="main">
+            <div class="movies">
+                <div id="start-movie" class="movie">
+                    <div class="movie-label">Start</div>
+                    <div class="search-bar">
+                        <input type="search"
+                               autocomplete="off"
+                               name="query" placeholder="Enter title..." 
+                               hx-get="/search/start" 
+                               hx-trigger="input changed delay:500ms, search"
+                               hx-target="#start-results">
+                        <div id="start-results" class="search-results"></div>
+                    </div>
+                </div>
+    
+                <div id="end-movie" class="movie">
+                    <div class="movie-label">End</div>
+                    <div class="search-bar">
+                        <input type="search"
+                               autocomplete="off"
+                               name="query" placeholder="Enter title..." 
+                               hx-get="/search/end" 
+                               hx-trigger="input changed delay:500ms, search"
+                               hx-target="#end-results">
+                        <div id="end-results" class="search-results"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="bottom" class="algorithms">
+                <h2>Algorithm</h2>
+                <form hx-post="/find-path/" hx-target="#bottom">
+                    <input type="radio" id="bfs" name="algorithm" value="BFS" checked="checked"/>
+                    <label for="BFS">Breadth-First Search</label>
+                    <input type="radio" id="dfs" name="algorithm" value="DFS"/>
+                    <label for="dfs">Depth-First Search</label>
+                    <button>Find Path</button>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

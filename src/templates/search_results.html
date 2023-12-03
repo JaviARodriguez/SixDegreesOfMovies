@@ -1,0 +1,8 @@
+{% for result in results %}
+<div class="search-result" hx-post="{{ post }}" hx-trigger="click" 
+     hx-target="{{ target }}"
+     hx-vals='{"id": {{ result.id }}, "title": "{{ result.title }}", "year": {{ result.year }}, "poster_url": "{{ result.poster_url }}"}'>
+    <img class="search-result-poster" src="{{ result.poster_url }}">
+    <div class="search-result-title">{{ result.title }} ({{ result.year }})</div>
+</div>
+{% endfor %}
