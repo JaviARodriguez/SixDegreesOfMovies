@@ -105,6 +105,41 @@ class Graph():
 
     # Finds a path from one movie to another
     # Return a list containing each movie in the path, in order
-    def DFS(self):
-        return []
+    def DFS(self, start_movie, end_movie):
+
+        visited = {}
+        for key in self.adjacency_list:
+            visited[key] = False
+
+        visited[start_movie.id] = True
+
+        prev = {}
+
+        stack = []
+        stack.append(start_movie)
+
+        found_destination = False
+        while stack and not found_destination:
+            u = stack.pop()
+
+            for v in self.adjacency_list[u.id]:
+                if not visited[v.id]:
+                    visited[v.id] = True
+                    prev[v.id] = u
+                    stack.append(v)
+                
+                if v.id == end_movie.id:
+                    found_destination = True
+        
+        path = []
+        if found_destination:
+            node = end_movie
+            while node.id != start_movie.id:
+                path.append(node)
+                node = prev[node.id]
+
+            path.append(node)
+            path = path[::-1]
+        
+        return path
 

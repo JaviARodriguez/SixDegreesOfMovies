@@ -68,13 +68,13 @@ def find_path():
     if algorithm == "BFS":
         path = graph.BFS(start_movie, end_movie)
     elif algorithm == "DFS":
-        path = graph.DFS()
-
-    execution_time = round(time.time() - start_time, 4)
+        path = graph.DFS(start_movie, end_movie)
 
     actors= []
     for i in range(len(path) - 1):
         actors.append(select_actor_in_both_movies(path[i], path[i+1]))
+
+    execution_time = round(time.time() - start_time, 4)
 
     return render_template('path_result.html', path=path, actors=actors, execution_time=execution_time)
 
