@@ -3,6 +3,7 @@ from flask import request
 from flask import render_template
 
 import requests
+import time
 
 from movie import Movie
 from graph import Graph
@@ -61,16 +62,23 @@ def set_movie(point):
 def find_path():
     algorithm = request.form.get("algorithm")
 
+    start_time = time.time()
+
     path = []
     if algorithm == "BFS":
-        path = graph.BFS()
+        path = graph.BFS(start_movie, end_movie)
     elif algorithm == "DFS":
         path = graph.DFS()
 
-    return render_template('path_result.html', path=path)
+    execution_time = round(time.time() - start_time, 4)
+
+    actors= []
+    for i in range(len(path) - 1):
+        actors.append(select_actor_in_both_movies(path[i], path[i+1]))
+
+    return render_template('path_result.html', path=path, actors=actors, execution_time=execution_time)
 
 def search_movies_by_title(title):
-    print("hello")
 
     query = """ SELECT *
                 FROM movies
@@ -87,3 +95,26 @@ def search_movies_by_title(title):
 
     return movies[:5]
 
+
+def select_actor_in_both_movies(movie1, movie2):
+    query = f""" SELECT name
+                 FROM actors
+                 WHERE id IN
+                    (
+                        SELECT actors.id
+                        FROM actors_in_movie, actors
+                        WHERE actors_in_movie.actor_id = actors.id
+                            AND actors_in_movie.movie_id = {movie1.id}
+                        INTERSECT
+                        SELECT actors.id
+                        FROM actors_in_movie, actors
+                        WHERE actors_in_movie.actor_id = actors.id
+                            AND actors_in_movie.movie_id = {movie2.id}
+                    );"""
+    
+    cursor = connection.cursor()
+    cursor.execute(query)
+
+    results = cursor.fetchall()
+
+    return results[0][0]

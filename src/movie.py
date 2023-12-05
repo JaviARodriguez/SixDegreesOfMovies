@@ -12,7 +12,7 @@ class Actor:
 
 class Movie:
     def __init__(self, id, title, year, poster_url):
-        self.id = id
+        self.id = int(id)
         self.title = title
         self.year = year
         self.poster_url = poster_url

@@ -1,5 +1,10 @@
-{% for movie in path %}
-<div>
-    {{movie.title}} ({{movie.year}})
+<div class="path">
+    {% for movie in path %}
+    {{movie.title}} ({{movie.year}}) {% if loop.index0 < actors|length %} -> {{actors[loop.index0]}} -> {% endif %}
+    {% endfor %}
 </div>
-{% endfor %}
+<div class="stats">
+    <div>Distance: {{actors|length}}</div>
+    <div>Execution Time: {{execution_time}} seconds</div>
+</div>
+<a class="button" href="/">New Path</button>

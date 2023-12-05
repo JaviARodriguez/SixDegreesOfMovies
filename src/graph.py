@@ -1,4 +1,5 @@
 from movie import *
+from collections import deque
 
 
 class Graph():
@@ -60,8 +61,47 @@ class Graph():
 
     # Finds the shortest path from one movie to another
     # Return a list containing each movie in the path, in order
-    def BFS(self):
-        return []
+    def BFS(self, start_movie, end_movie):
+
+        visited = {}
+        for key in self.adjacency_list:
+            visited[key] = False
+
+        visited[start_movie.id] = True
+
+        prev = {}
+
+        queue = deque([])
+        queue.append(start_movie)
+
+        found_destination = False
+        while queue and not found_destination:
+            u = queue[0]
+            queue.popleft()
+
+            print(u.id)
+
+            for v in self.adjacency_list[int(u.id)]:
+                if not visited[v.id]:
+                    visited[v.id] = True
+                    prev[v.id] = u
+                    queue.append(v)
+
+
+                    if v.id == end_movie.id:
+                        found_destination = True
+        
+        path = []
+        if found_destination:
+            node = end_movie
+            while node.id != start_movie.id:
+                path.append(node)
+                node = prev[node.id]
+
+            path.append(node)
+            path = path[::-1]
+
+        return path
 
     # Finds a path from one movie to another
     # Return a list containing each movie in the path, in order
